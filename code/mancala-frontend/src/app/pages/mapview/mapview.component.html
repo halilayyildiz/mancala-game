@@ -1,0 +1,43 @@
+<div>
+  <noms-menubar></noms-menubar>
+
+  <div class="ui-g" style="flex-wrap: nowrap !important;">
+
+    <div class="ui-g-2" style="min-width:250px; width:280px">
+      <div>
+        <p-card>
+          <div><span>Actions</span></div>
+          <div class="customHr"><span> - </span></div>
+          <div><span><button pButton type="button" label="Start Game" (click)="startGame($event)"></button></span></div>
+        </p-card>
+      </div>
+
+      <div class="filterPanel">
+        <p-card>
+          <div><span> </span></div>
+          <div><span> </span></div>
+          <div><span> </span></div>
+          <div><span> </span></div>
+          <div><span> </span></div>
+        </p-card>
+      </div>
+
+      <div class="filterPanel">
+        <p-card>
+          <div><span> </span></div>
+          <div><span> </span></div>
+        </p-card>
+      </div>
+    </div>
+
+    <div class="ui-g-10" style="min-width:400px; width:calc(100% - 280px)">
+      <p-card>
+        <div>
+          <div id="map" class="map"></div>
+
+        </div>
+      </p-card>
+    </div>
+
+  </div>
+</div>

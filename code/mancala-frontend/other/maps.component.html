@@ -1,0 +1,27 @@
+<button class="right-bar-button" pButton type="button" (click)= "rightBar.displayLayers()" icon="fa-clone" ></button>
+<div id="map" style="width: 100%; height: 100%; position:fixed"></div>
+<app-map-right-bar #rightBar ></app-map-right-bar>
+
+<div #gisListContainer id="popup" class="ol-popup">
+  <a #gisListCloser href="#" id="popup-closer" class="ol-popup-closer"></a>
+  <div #gisListContent id="popup-content" class="popup-content">
+    <p-dataTable [value]="gisElementList"
+                 [style]="{'width':'500px'}"
+                 selectionMode="single"
+                 (onRowSelect)="onGisElementSelected($event)">
+      <p-column field="integrationId" header="ID" [sortable]="true"></p-column>
+      <p-column field="type" header="{{'gisInfo.type' | translate}}" [sortable]="true">
+        <ng-template let-row="rowData" pTemplate="body">
+          <span>{{'gisInfo.' + row.type | translate}}</span>
+        </ng-template>
+      </p-column>
+    </p-dataTable>
+  </div>
+</div>
+
+<p-dialog header="{{'gisInfo.metrics' | translate}}" [positionTop]="60" [positionLeft]="48" [(visible)]="gisFacilityDetailsVisible" [width]="1200" [height]="600" [resizable]="true" [responsive]="true">
+  <app-dma-metric-details *ngIf="gisFacilityDetailsVisible" [gisFacility]="gisFacilityForDetails"></app-dma-metric-details>
+</p-dialog>
+
+
+

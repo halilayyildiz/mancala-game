@@ -1,0 +1,15 @@
+.customHr {
+  width: 95%;
+  font-size: 1px;
+  color: rgba(0, 0, 0, 0);
+  line-height: 1px;
+  background-color: darkturquoise;
+  margin-top: 6px;
+  margin-bottom: 12px;
+}
+
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
+}
