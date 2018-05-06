@@ -1,0 +1,2 @@
+# mancala-game
+Mancale Game
