@@ -1,2 +1,2 @@
 # mancala-game
-Mancale Game
+Mancala Game: Web based two player mancala game impl
