@@ -29,7 +29,7 @@ import { MapviewComponent } from './pages/mapview/mapview.component';
 
 // services
 import { MessageService } from './service/message.service';
-import { OutageService } from './service/outage.service';
+import { GameService } from './service/game.service';
 
 
 @NgModule({
@@ -61,7 +61,7 @@ import { OutageService } from './service/outage.service';
   ],
   providers: [
     MessageService,
-    OutageService
+    GameService
   ],
   bootstrap: [AppComponent]
 })

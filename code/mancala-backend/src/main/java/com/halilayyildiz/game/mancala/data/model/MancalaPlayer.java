@@ -1,38 +1,41 @@
 package com.halilayyildiz.game.mancala.data.model;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.halilayyildiz.game.mancala.service.GameService;
-import com.halilayyildiz.game.model.GameType;
+import com.halilayyildiz.game.base.BasePlayer;
+import com.halilayyildiz.game.model.IGame;
 import com.halilayyildiz.game.model.IGameStatus;
 import com.halilayyildiz.game.model.IPlayer;
 
-public class MancalaPlayer implements IPlayer
+import lombok.Data;
+
+@Data
+public class MancalaPlayer extends BasePlayer implements IPlayer
 {
-	@Autowired
-	GameService	gameService;
+    private Integer playerIndex;
+    private MancalaGame game;
 
-	MancalaGame	game;
+    public MancalaPlayer()
+    {
+        super();
+    }
 
-	@Override
-	public IGameStatus joinGame(GameType gameType)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public void join(IGame game)
+    {
+        this.game = (MancalaGame) game;
+        this.playerIndex = this.game.addPlayer(this);
+    }
 
-	@Override
-	public IGameStatus makeMove(PlayerMove move)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public IGameStatus move(PlayerMove move)
+    {
+        return this.game.onPlayerMove(move);
+    }
 
-	@Override
-	public IGameStatus resignGame()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public IGameStatus resignGame()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 }

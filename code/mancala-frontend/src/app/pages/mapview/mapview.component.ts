@@ -8,7 +8,7 @@ import { catchError, map, tap, flatMap } from 'rxjs/operators';
 import { of } from 'rxjs/observable/of';
 
 import { MessageService } from '../../service/message.service';
-import { OutageService } from '../../service/outage.service';
+import { GameService } from '../../service/game.service';
 
 import * as ContextMenu from 'ol-contextmenu';
 import Map from 'ol/map';
@@ -46,78 +46,94 @@ export class MapviewComponent implements OnInit {
 
     constructor(
         private activatedRoute: ActivatedRoute,
-        private outageService: OutageService,
+        private gameService: GameService,
     ) { }
 
     // map
     map: Map;
     contextMenu;
     boardLayer;
-    playerId = 1;
+    boardSource;
+
+    playerIndex;
+    playerId;
+    gameId;
 
     board = {
         player1:
-        {
-            kalah:
             {
-                'owner': 1, 'coord': [35.500040, 38.699970], 'count': 6
+                kalah:
+                    {
+                        'owner': 1, 'coord': [35.500040, 38.699970], 'count': 6
+                    },
+                pits: [
+                    { 'owner': 1, num: 1, 'coord': [35.500100, 38.700000], 'count': 6 },
+                    { 'owner': 1, num: 2, 'coord': [35.500150, 38.700000], 'count': 6 },
+                    { 'owner': 1, num: 3, 'coord': [35.500200, 38.700000], 'count': 6 },
+                    { 'owner': 1, num: 4, 'coord': [35.500250, 38.700000], 'count': 6 },
+                    { 'owner': 1, num: 5, 'coord': [35.500300, 38.700000], 'count': 6 },
+                    { 'owner': 1, num: 6, 'coord': [35.500350, 38.700000], 'count': 6 }
+                ]
             },
-            pits: [
-                { 'owner': 1, num: 1, 'coord': [35.500100, 38.700000], 'count': 6 },
-                { 'owner': 1, num: 2, 'coord': [35.500150, 38.700000], 'count': 6 },
-                { 'owner': 1, num: 3, 'coord': [35.500200, 38.700000], 'count': 6 },
-                { 'owner': 1, num: 4, 'coord': [35.500250, 38.700000], 'count': 6 },
-                { 'owner': 1, num: 5, 'coord': [35.500300, 38.700000], 'count': 6 },
-                { 'owner': 1, num: 6, 'coord': [35.500350, 38.700000], 'count': 6 }
-            ]
-        },
         player2:
-        {
-            kalah:
             {
-                'owner': 2, 'coord': [35.500410, 38.699970],
-                'count': 6
-            },
-            pits: [
-                { 'owner': 2, num: 1, 'coord': [35.500100, 38.699950], 'count': 6 },
-                { 'owner': 2, num: 2, 'coord': [35.500150, 38.699950], 'count': 6 },
-                { 'owner': 2, num: 3, 'coord': [35.500200, 38.699950], 'count': 6 },
-                { 'owner': 2, num: 4, 'coord': [35.500250, 38.699950], 'count': 6 },
-                { 'owner': 2, num: 5, 'coord': [35.500300, 38.699950], 'count': 6 },
-                { 'owner': 2, num: 6, 'coord': [35.500350, 38.699950], 'count': 6 }
-            ]
-        }
+                kalah:
+                    {
+                        'owner': 2, 'coord': [35.500410, 38.699970], 'count': 6
+                    },
+                pits: [
+                    { 'owner': 2, num: 1, 'coord': [35.500100, 38.699950], 'count': 6 },
+                    { 'owner': 2, num: 2, 'coord': [35.500150, 38.699950], 'count': 6 },
+                    { 'owner': 2, num: 3, 'coord': [35.500200, 38.699950], 'count': 6 },
+                    { 'owner': 2, num: 4, 'coord': [35.500250, 38.699950], 'count': 6 },
+                    { 'owner': 2, num: 5, 'coord': [35.500300, 38.699950], 'count': 6 },
+                    { 'owner': 2, num: 6, 'coord': [35.500350, 38.699950], 'count': 6 }
+                ]
+            }
     };
 
+    startGame(evt) {
+        this.gameService.joinGame()
+            .subscribe(res => {
+                this.playerId = res.playerId;
+                this.gameId = res.gameId;
+                this.playerIndex = res.playerIndex;
+
+                console.log('Game Connected:');
+                console.log('Game Id: ' + this.gameId);
+                console.log('Player Id: ' + this.playerId);
+                console.log('Player Index: ' + this.playerIndex);
+            });
+    }
+
+    makeMove(pitNum) {
+        console.log('Move: ' + pitNum);
+
+        this.gameService.sendMove(this.playerId, this.gameId, pitNum)
+            .subscribe(res => {
+                this.board.player1.kalah.count = res.board.playerKalahs[0];
+                this.board.player2.kalah.count = res.board.playerKalahs[1];
+
+                const pl1Pits = res.board.playerPits[0];
+                for (let i = 0; i < pl1Pits.length; i++) {
+                    this.board.player1.pits[i].count = pl1Pits[i];
+                }
+                const pl2Pits = res.board.playerPits[1];
+                for (let i = 0; i < pl2Pits.length; i++) {
+                    this.board.player2.pits[i].count = pl1Pits[i];
+                }
+
+                console.log(res);
+                console.log(this.board);
+
+                this.refreshMapSource();
+            });
+    }
 
     initializeMap() {
-        const styles = [
-        ];
-        const layers = [];
-        // let i, ii;
-        // for (i = 0, ii = styles.length; i < ii; ++i) {
-        //     layers.push(new LayerTile({
-        //         preload: Infinity,
-        //         source: new SourceBingMaps({
-        //             key: 'AkS0TR-kj4QuraHNThgKOXWr9lZTq3CD32_AFT05mQfVqMvBQL7dYacpTCecYZPi',
-        //             imagerySet: styles[i]
-        //             // use maxZoom 19 to see stretched tiles instead of the BingMaps
-        //             // "no photos at this zoom level" tiles
-        //             // maxZoom: 19
-        //         })
-        //     }));
-        // }
-
-        // layers.push(new LayerTile({
-        //     visible: false,
-        //     source: new SourceXYZ({
-        //         url: 'https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-        //     })
-        // }));
-
         this.map = new Map({
             target: 'map',
-            layers: layers,
+            layers: [],
             view: new View({
                 center: Proj.fromLonLat([35.500240, 38.699940]),
                 zoom: 21.4,
@@ -129,7 +145,7 @@ export class MapviewComponent implements OnInit {
 
         this.contextMenu = new ContextMenu({
             width: 170,
-            defaultItems: false, // defaultItems are (for now) Zoom In/Zoom Out
+            defaultItems: true, // defaultItems are (for now) Zoom In/Zoom Out
             items: []
         });
         this.map.addControl(this.contextMenu);
@@ -158,39 +174,44 @@ export class MapviewComponent implements OnInit {
             });
         };
 
-        const source = new SourceVector();
+        this.boardSource = new SourceVector();
         this.boardLayer = new LayerVector({
-            source: source,
+            source: this.boardSource,
             style: styleFunct
         });
 
-        source.addFeature(new Feature({
-            owner: this.board.player1.kalah.owner, count: this.board.player1.kalah.count,
+        this.map.addLayer(this.boardLayer);
+    }
+
+    refreshMapSource() {
+        this.boardSource.clear();
+
+        this.boardSource.addFeature(new Feature({
+            owner: this.board.player1.kalah.owner,
+            count: this.board.player1.kalah.count,
             geometry: new GeomCircle(Proj.fromLonLat(this.board.player1.kalah.coord), 3)
         }));
         this.board.player1.pits.forEach(pit => {
-            source.addFeature(new Feature({
+            this.boardSource.addFeature(new Feature({
                 owner: pit.owner, num: pit.num, count: pit.count, geometry: new GeomCircle(Proj.fromLonLat(pit.coord), 2)
             }));
         });
-        source.addFeature(new Feature({
-            owner: this.board.player2.kalah.owner, count: this.board.player2.kalah.count,
+        this.boardSource.addFeature(new Feature({
+            owner: this.board.player2.kalah.owner,
+            count: this.board.player2.kalah.count,
             geometry: new GeomCircle(Proj.fromLonLat(this.board.player2.kalah.coord), 3)
         }));
         this.board.player2.pits.forEach(pit => {
-            source.addFeature(new Feature({
+            this.boardSource.addFeature(new Feature({
                 owner: pit.owner, num: pit.num, count: pit.count, geometry: new GeomCircle(Proj.fromLonLat(pit.coord), 2)
             }));
         });
-
-        this.map.addLayer(this.boardLayer);
-
     }
 
     registerEvents() {
         this.contextMenu.on('beforeopen', evt => {
             const featureFound = this.map.forEachFeatureAtPixel(evt.pixel, ft => ft);
-            if (featureFound.get('owner') === this.playerId && featureFound.get('num')) {
+            if (featureFound.get('owner') === this.playerIndex && featureFound.get('num')) {
                 this.contextMenu.enable();
             } else {
                 this.contextMenu.disable();
@@ -200,14 +221,14 @@ export class MapviewComponent implements OnInit {
         this.contextMenu.on('open', evt => {
             const feature = this.map.forEachFeatureAtPixel(evt.pixel, ft => ft);
 
-            if (feature.get('owner') === this.playerId && feature.get('num')) {
+            if (feature.get('owner') === this.playerIndex && feature.get('num')) {
                 this.contextMenu.clear();
 
                 this.contextMenu.extend([{
                     text: 'Play',
                     classname: 'bold',
                     callback: () => {
-                        console.log(`Play: ${this.playerId} - ${feature.get('num')}`);
+                        this.makeMove(feature.get('num'));
                     }
                 }]);
             } else {
@@ -219,6 +240,7 @@ export class MapviewComponent implements OnInit {
     ngOnInit() {
         this.initializeMap();
         this.draw();
+        this.refreshMapSource();
         this.registerEvents();
     }
 }

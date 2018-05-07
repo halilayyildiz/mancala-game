@@ -1,17 +1,21 @@
 package com.halilayyildiz.game.model;
 
+import com.halilayyildiz.game.mancala.data.model.PlayerMove;
+
 public interface IGame
 {
-	String getId();
+    String getId();
 
-	GameType getType();
+    GameType getType();
 
-	int getMaxPlayerCapacity();
+    int getMaxPlayerCapacity();
 
-	boolean isFull();
+    boolean isFull();
 
-	IGameStatus getStatus();
+    int addPlayer(IPlayer player);
 
-	IGameStatus addPlayer(IPlayer player);
+    IGameStatus onPlayerMove(PlayerMove playerMove);
+
+    IGameStatus getStatus();
 
 }
