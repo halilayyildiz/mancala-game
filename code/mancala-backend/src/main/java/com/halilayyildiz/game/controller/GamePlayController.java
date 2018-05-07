@@ -1,5 +1,8 @@
 package com.halilayyildiz.game.controller;
 
+import java.util.Optional;
+
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.github.vbauer.herald.annotation.Log;
 import com.halilayyildiz.game.data.dto.GameJoinResponse;
 import com.halilayyildiz.game.data.dto.GameStatusResponse;
 import com.halilayyildiz.game.exception.GameNotFoundException;
@@ -26,40 +30,46 @@ import com.halilayyildiz.game.util.GameTypeResolver;
 @RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
 public class GamePlayController
 {
-    @Autowired
-    GameService gameService;
+	@Log
+	private Logger	logger;
 
-    @Autowired
-    PlayerService playerService;
+	@Autowired
+	GameService		gameService;
 
-    @RequestMapping(value = "/game/join", method = RequestMethod.GET)
-    public ResponseEntity<GameJoinResponse> joinGame(@RequestParam("gameType") String type, @RequestParam("playerName") String playerName)
-            throws GameTypeInvalidException
-    {
-        GameType gameType = GameTypeResolver.get(type).orElseThrow(() -> new GameTypeInvalidException("Invalid Game Type: " + type));
+	@Autowired
+	PlayerService	playerService;
 
-        IPlayer player = playerService.createPlayer(playerName, gameType);
-        IGame game = gameService.findOpenGame(gameType);
+	@RequestMapping(value = "/game/join", method = RequestMethod.GET)
+	public ResponseEntity<GameJoinResponse> joinGame(@RequestParam("gameType") String type, @RequestParam("playerName") String playerName)
+	{
+		logger.info("Player game join requested: gameType: " + type + ", playerName:  " + playerName);
 
-        player.join(game);
+		GameType gameType = GameTypeResolver.get(type).orElseThrow(() -> new GameTypeInvalidException("Invalid Game Type: " + type));
+		IPlayer player = playerService.createPlayer(playerName, gameType);
+		IGame game = gameService.findOpenGame(gameType);
+		player.join(game);
 
-        System.out.println("Player connected: gameId" + player.getGame().getId() + " " + player.getId());
+		return ResponseEntity.ok(new GameJoinResponse(player).success());
+	}
 
-        return ResponseEntity.ok(new GameJoinResponse(player).success());
-    }
+	@RequestMapping(value = "/player/move", method = RequestMethod.GET)
+	public ResponseEntity<GameStatusResponse> playerMove(@RequestParam("gameId") String gameId, @RequestParam("playerId") String playerId,
+			@RequestParam("pitNum") Integer pitNum)
+	{
+		logger.info("Player move requested: gameId: " + gameId + ", playerId:  " + playerId + " pit:  " + pitNum);
 
-    @RequestMapping(value = "/player/move", method = RequestMethod.GET)
-    public ResponseEntity<GameStatusResponse> playerMove(@RequestParam("gameId") String gameId, @RequestParam("playerId") String playerId,
-            @RequestParam("pitNum") Integer pitNum)
-    {
-        IPlayer player = playerService.getPlayer(playerId).orElseThrow(() -> new PlayerNotFoundException(playerId));
-        IGame game = gameService.getGame(gameId).orElseThrow(() -> new GameNotFoundException(gameId));
+		IPlayer player = playerService.getPlayer(playerId).orElseThrow(() -> new PlayerNotFoundException(playerId));
+		IGame game = gameService.getGame(gameId).orElseThrow(() -> new GameNotFoundException(gameId));
+		IGameStatus status = player.move(new PlayerMove(game, player, pitNum));
 
-        IGameStatus status = player.move(new PlayerMove(game, player, pitNum));
+		return ResponseEntity.ok(new GameStatusResponse(status).success());
+	}
 
-        System.out.println("Player moved: gameId" + player.getGame().getId() + " " + player.getId() + " - pit: " + pitNum);
-
-        return ResponseEntity.ok(new GameStatusResponse(status).success());
-    }
+	@RequestMapping(value = "/game/status", method = RequestMethod.GET)
+	public ResponseEntity<GameStatusResponse> getGameStatus(@RequestParam("gameId") String gameId)
+	{
+		IGame game = gameService.getGame(gameId).orElseThrow(() -> new GameNotFoundException(gameId));
+		return ResponseEntity.ok(new GameStatusResponse(game.getStatus()).success());
+	}
 
 }

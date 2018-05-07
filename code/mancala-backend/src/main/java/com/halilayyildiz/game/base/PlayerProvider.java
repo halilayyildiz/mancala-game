@@ -1,5 +1,7 @@
 package com.halilayyildiz.game.base;
 
+import org.springframework.beans.factory.ObjectFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.halilayyildiz.game.exception.GameTypeInvalidException;
@@ -10,15 +12,18 @@ import com.halilayyildiz.game.model.IPlayer;
 @Component
 public class PlayerProvider
 {
-    IPlayer get(GameType type) throws GameTypeInvalidException
-    {
-        switch (type)
-        {
-        case MANCALA:
-            return new MancalaPlayer();
-        default:
-            throw new GameTypeInvalidException("Game type not found !" + type);
-        }
-    }
+	@Autowired
+	private ObjectFactory<MancalaPlayer> mancalaPlayerFactory;
+
+	IPlayer get(GameType type) throws GameTypeInvalidException
+	{
+		switch (type)
+		{
+			case MANCALA:
+				return mancalaPlayerFactory.getObject();
+			default:
+				throw new GameTypeInvalidException("Game type not found !" + type);
+		}
+	}
 
 }

@@ -1,21 +1,27 @@
 package com.halilayyildiz.game.model;
 
+import java.util.LinkedHashMap;
+
 import com.halilayyildiz.game.mancala.data.model.PlayerMove;
 
 public interface IGame
 {
-    String getId();
+	String getId();
 
-    GameType getType();
+	GameType getType();
 
-    int getMaxPlayerCapacity();
+	int getMaxPlayerCapacity();
 
-    boolean isFull();
+	boolean isFull();
 
-    int addPlayer(IPlayer player);
+	int addPlayer(IPlayer player);
 
-    IGameStatus onPlayerMove(PlayerMove playerMove);
+	void setActivePlayerId(String playerId);
 
-    IGameStatus getStatus();
+	LinkedHashMap<String, IPlayer> getPlayers();
+
+	IGameStatus onPlayerMove(PlayerMove playerMove);
+
+	IGameStatus getStatus();
 
 }

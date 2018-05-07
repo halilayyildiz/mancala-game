@@ -58,38 +58,39 @@ export class MapviewComponent implements OnInit {
     playerIndex;
     playerId;
     gameId;
+    isYourTurn: boolean;
 
     board = {
         player1:
+        {
+            kalah:
             {
-                kalah:
-                    {
-                        'owner': 1, 'coord': [35.500040, 38.699970], 'count': 6
-                    },
-                pits: [
-                    { 'owner': 1, num: 1, 'coord': [35.500100, 38.700000], 'count': 6 },
-                    { 'owner': 1, num: 2, 'coord': [35.500150, 38.700000], 'count': 6 },
-                    { 'owner': 1, num: 3, 'coord': [35.500200, 38.700000], 'count': 6 },
-                    { 'owner': 1, num: 4, 'coord': [35.500250, 38.700000], 'count': 6 },
-                    { 'owner': 1, num: 5, 'coord': [35.500300, 38.700000], 'count': 6 },
-                    { 'owner': 1, num: 6, 'coord': [35.500350, 38.700000], 'count': 6 }
-                ]
+                'owner': 1, 'coord': [35.500040, 38.699970], 'count': 6
             },
+            pits: [
+                { 'owner': 1, num: 1, 'coord': [35.500350, 38.700000], 'count': 6 },
+                { 'owner': 1, num: 2, 'coord': [35.500300, 38.700000], 'count': 6 },
+                { 'owner': 1, num: 3, 'coord': [35.500250, 38.700000], 'count': 6 },
+                { 'owner': 1, num: 4, 'coord': [35.500200, 38.700000], 'count': 6 },
+                { 'owner': 1, num: 5, 'coord': [35.500150, 38.700000], 'count': 6 },
+                { 'owner': 1, num: 6, 'coord': [35.500100, 38.700000], 'count': 6 }
+            ]
+        },
         player2:
+        {
+            kalah:
             {
-                kalah:
-                    {
-                        'owner': 2, 'coord': [35.500410, 38.699970], 'count': 6
-                    },
-                pits: [
-                    { 'owner': 2, num: 1, 'coord': [35.500100, 38.699950], 'count': 6 },
-                    { 'owner': 2, num: 2, 'coord': [35.500150, 38.699950], 'count': 6 },
-                    { 'owner': 2, num: 3, 'coord': [35.500200, 38.699950], 'count': 6 },
-                    { 'owner': 2, num: 4, 'coord': [35.500250, 38.699950], 'count': 6 },
-                    { 'owner': 2, num: 5, 'coord': [35.500300, 38.699950], 'count': 6 },
-                    { 'owner': 2, num: 6, 'coord': [35.500350, 38.699950], 'count': 6 }
-                ]
-            }
+                'owner': 2, 'coord': [35.500410, 38.699970], 'count': 6
+            },
+            pits: [
+                { 'owner': 2, num: 1, 'coord': [35.500100, 38.699950], 'count': 6 },
+                { 'owner': 2, num: 2, 'coord': [35.500150, 38.699950], 'count': 6 },
+                { 'owner': 2, num: 3, 'coord': [35.500200, 38.699950], 'count': 6 },
+                { 'owner': 2, num: 4, 'coord': [35.500250, 38.699950], 'count': 6 },
+                { 'owner': 2, num: 5, 'coord': [35.500300, 38.699950], 'count': 6 },
+                { 'owner': 2, num: 6, 'coord': [35.500350, 38.699950], 'count': 6 }
+            ]
+        }
     };
 
     startGame(evt) {
@@ -104,31 +105,47 @@ export class MapviewComponent implements OnInit {
                 console.log('Player Id: ' + this.playerId);
                 console.log('Player Index: ' + this.playerIndex);
             });
+
+        setInterval(() => {
+            this.refreshGameStatus();
+        }, 5000);
     }
 
     makeMove(pitNum) {
         console.log('Move: ' + pitNum);
 
+        this.isYourTurn = false;
         this.gameService.sendMove(this.playerId, this.gameId, pitNum)
             .subscribe(res => {
-                this.board.player1.kalah.count = res.board.playerKalahs[0];
-                this.board.player2.kalah.count = res.board.playerKalahs[1];
-
-                const pl1Pits = res.board.playerPits[0];
-                for (let i = 0; i < pl1Pits.length; i++) {
-                    this.board.player1.pits[i].count = pl1Pits[i];
-                }
-                const pl2Pits = res.board.playerPits[1];
-                for (let i = 0; i < pl2Pits.length; i++) {
-                    this.board.player2.pits[i].count = pl1Pits[i];
-                }
-
-                console.log(res);
-                console.log(this.board);
-
+                this.updateBoardData(res);
                 this.refreshMapSource();
             });
     }
+
+    refreshGameStatus() {
+        this.gameService.getGameStatus(this.gameId)
+            .subscribe(res => {
+                this.updateBoardData(res);
+                this.refreshMapSource();
+
+                this.isYourTurn = (res.activePlayerId === this.playerId);
+            });
+    }
+
+    updateBoardData(data) {
+        this.board.player1.kalah.count = data.board.playerKalahs[0];
+        this.board.player2.kalah.count = data.board.playerKalahs[1];
+
+        const pl1Pits = data.board.playerPits[0];
+        for (let i = 0; i < pl1Pits.length; i++) {
+            this.board.player1.pits[i].count = pl1Pits[i];
+        }
+        const pl2Pits = data.board.playerPits[1];
+        for (let i = 0; i < pl2Pits.length; i++) {
+            this.board.player2.pits[i].count = pl2Pits[i];
+        }
+    }
+
 
     initializeMap() {
         this.map = new Map({
@@ -211,7 +228,7 @@ export class MapviewComponent implements OnInit {
     registerEvents() {
         this.contextMenu.on('beforeopen', evt => {
             const featureFound = this.map.forEachFeatureAtPixel(evt.pixel, ft => ft);
-            if (featureFound.get('owner') === this.playerIndex && featureFound.get('num')) {
+            if (featureFound.get('owner') === this.playerIndex && featureFound.get('num') && this.isYourTurn) {
                 this.contextMenu.enable();
             } else {
                 this.contextMenu.disable();
@@ -221,7 +238,7 @@ export class MapviewComponent implements OnInit {
         this.contextMenu.on('open', evt => {
             const feature = this.map.forEachFeatureAtPixel(evt.pixel, ft => ft);
 
-            if (feature.get('owner') === this.playerIndex && feature.get('num')) {
+            if (feature.get('owner') === this.playerIndex && feature.get('num') && this.isYourTurn) {
                 this.contextMenu.clear();
 
                 this.contextMenu.extend([{

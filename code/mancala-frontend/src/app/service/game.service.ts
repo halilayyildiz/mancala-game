@@ -58,6 +58,17 @@ export class GameService {
         );
     }
 
+    getGameStatus(gameId): Observable<any> {
+        const url = `/api/game/status?gameId=${gameId}`;
+        return this.http.get<any>(url)
+            .pipe(
+                catchError(this.handleError('error', [])),
+                map(res => {
+                    return res.status;
+                }),
+        );
+    }
+
     getOutageStatuses(): Observable<any> {
         const url = '/api/outage/status/all';
         return this.http.get<any>(url)

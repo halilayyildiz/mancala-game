@@ -13,28 +13,28 @@ import com.halilayyildiz.game.model.IPlayer;
 @Component
 public class PlayerStore
 {
-    @Autowired
-    PlayerProvider playerProvider;
+	@Autowired
+	PlayerProvider							playerProvider;
 
-    Map<String, Optional<IPlayer>> players = new HashedMap<>();
+	private Map<String, Optional<IPlayer>>	players	= new HashedMap<>();
 
-    public PlayerStore()
-    {
+	public PlayerStore()
+	{
 
-    }
+	}
 
-    public IPlayer createPlayer(String playerName, GameType gameType)
-    {
-        IPlayer player = playerProvider.get(gameType);
-        player.setName(playerName);
-        players.put(player.getId(), Optional.of(player));
+	public IPlayer createPlayer(String playerName, GameType gameType)
+	{
+		IPlayer player = playerProvider.get(gameType);
+		player.setName(playerName);
+		players.put(player.getId(), Optional.of(player));
 
-        return player;
-    }
+		return player;
+	}
 
-    public Optional<IPlayer> find(String playerId)
-    {
-        return players.get(playerId);
-    }
+	public Optional<IPlayer> find(String playerId)
+	{
+		return players.get(playerId);
+	}
 
 }

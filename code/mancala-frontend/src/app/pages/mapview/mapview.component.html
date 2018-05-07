@@ -13,10 +13,10 @@
       </div>
 
       <div class="filterPanel">
-        <p-card>
-          <div><span> </span></div>
-          <div><span> </span></div>
-          <div><span> </span></div>
+        <p-card st>
+          <div [style.color]="playerIndex == 1 ? 'blue' : 'red'" *ngIf="playerIndex">
+            <span>Player : </span><span>{{playerIndex}}</span>
+          </div>
           <div><span> </span></div>
           <div><span> </span></div>
         </p-card>
@@ -24,10 +24,15 @@
 
       <div class="filterPanel">
         <p-card>
+          <div>
+            <span>Your Turn : </span><span *ngIf="isYourTurn">YES</span>
+          </div>
           <div><span> </span></div>
           <div><span> </span></div>
         </p-card>
       </div>
+
+
     </div>
 
     <div class="ui-g-10" style="min-width:400px; width:calc(100% - 280px)">
