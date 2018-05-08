@@ -2,7 +2,7 @@ package com.halilayyildiz.game.model;
 
 import java.util.LinkedHashMap;
 
-import com.halilayyildiz.game.mancala.data.model.PlayerMove;
+import com.halilayyildiz.game.mancala.PlayerMove;
 
 public interface IGame
 {

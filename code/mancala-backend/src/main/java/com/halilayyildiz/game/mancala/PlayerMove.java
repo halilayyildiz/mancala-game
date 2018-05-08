@@ -1,13 +1,13 @@
-package com.halilayyildiz.game.mancala.data.model;
+package com.halilayyildiz.game.mancala;
 
 import com.halilayyildiz.game.model.IGame;
 import com.halilayyildiz.game.model.IPlayer;
-import com.halilayyildiz.game.model.IPlayerAction;
+import com.halilayyildiz.game.model.IPlayerMove;
 
 import lombok.Data;
 
 @Data
-public class PlayerMove implements IPlayerAction
+public class PlayerMove implements IPlayerMove
 {
     private IGame game;
     private IPlayer player;

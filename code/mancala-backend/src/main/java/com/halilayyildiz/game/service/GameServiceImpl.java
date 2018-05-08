@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.halilayyildiz.game.base.GameStore;
+import com.halilayyildiz.game.GameStore;
 import com.halilayyildiz.game.model.GameType;
 import com.halilayyildiz.game.model.IGame;
 

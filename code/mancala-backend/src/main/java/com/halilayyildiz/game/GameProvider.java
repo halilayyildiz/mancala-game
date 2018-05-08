@@ -1,11 +1,11 @@
-package com.halilayyildiz.game.base;
+package com.halilayyildiz.game;
 
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.halilayyildiz.game.exception.GameTypeInvalidException;
-import com.halilayyildiz.game.mancala.data.model.MancalaGame;
+import com.halilayyildiz.game.mancala.MancalaGame;
 import com.halilayyildiz.game.model.GameType;
 import com.halilayyildiz.game.model.IGame;
 

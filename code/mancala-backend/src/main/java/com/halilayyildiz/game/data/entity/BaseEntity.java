@@ -1,4 +1,4 @@
-package com.halilayyildiz.game.mancala.data.entity;
+package com.halilayyildiz.game.data.entity;
 
 import java.io.Serializable;
 

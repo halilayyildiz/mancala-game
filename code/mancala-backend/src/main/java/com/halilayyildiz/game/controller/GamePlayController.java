@@ -17,7 +17,7 @@ import com.halilayyildiz.game.data.dto.GameStatusResponse;
 import com.halilayyildiz.game.exception.GameNotFoundException;
 import com.halilayyildiz.game.exception.GameTypeInvalidException;
 import com.halilayyildiz.game.exception.PlayerNotFoundException;
-import com.halilayyildiz.game.mancala.data.model.PlayerMove;
+import com.halilayyildiz.game.mancala.PlayerMove;
 import com.halilayyildiz.game.model.GameType;
 import com.halilayyildiz.game.model.IGame;
 import com.halilayyildiz.game.model.IGameStatus;

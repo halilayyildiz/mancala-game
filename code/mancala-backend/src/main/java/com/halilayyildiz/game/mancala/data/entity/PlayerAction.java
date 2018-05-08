@@ -10,6 +10,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.halilayyildiz.game.data.entity.BaseEntity;
 import com.halilayyildiz.game.model.GameType;
 
 import lombok.Data;
@@ -17,8 +18,17 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "PLAYER_EVENT")
-public class PlayerEvent extends BaseEntity
+public class PlayerAction extends BaseEntity
 {
+	public PlayerAction(String playerId, GameType gameType, String gameId, String action, Date date)
+	{
+		this.playerId = playerId;
+		this.gameType = gameType;
+		this.gameId = gameId;
+		this.action = action;
+		this.date = date;
+	}
+
 	@Column(name = "PLAYER_ID")
 	private String		playerId;
 

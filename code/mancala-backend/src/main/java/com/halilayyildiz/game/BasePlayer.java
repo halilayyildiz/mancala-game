@@ -1,4 +1,4 @@
-package com.halilayyildiz.game.base;
+package com.halilayyildiz.game;
 
 import java.util.UUID;
 

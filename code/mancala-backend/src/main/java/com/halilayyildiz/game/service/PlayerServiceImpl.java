@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.github.vbauer.herald.annotation.Log;
-import com.halilayyildiz.game.base.PlayerStore;
+import com.halilayyildiz.game.PlayerStore;
 import com.halilayyildiz.game.model.GameType;
 import com.halilayyildiz.game.model.IPlayer;
 

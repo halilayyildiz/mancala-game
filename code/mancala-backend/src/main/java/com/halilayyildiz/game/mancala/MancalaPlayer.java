@@ -1,11 +1,11 @@
-package com.halilayyildiz.game.mancala.data.model;
+package com.halilayyildiz.game.mancala;
 
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.github.vbauer.herald.annotation.Log;
-import com.halilayyildiz.game.base.BasePlayer;
+import com.halilayyildiz.game.BasePlayer;
 import com.halilayyildiz.game.model.IGame;
 import com.halilayyildiz.game.model.IGameStatus;
 import com.halilayyildiz.game.model.IPlayer;

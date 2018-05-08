@@ -1,4 +1,4 @@
-package com.halilayyildiz.game.mancala.data.model;
+package com.halilayyildiz.game.mancala;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.github.vbauer.herald.annotation.Log;
-import com.halilayyildiz.game.base.BaseGame;
+import com.halilayyildiz.game.BaseGame;
 import com.halilayyildiz.game.exception.GameCapacityExceededException;
 import com.halilayyildiz.game.model.GameType;
 import com.halilayyildiz.game.model.IGame;

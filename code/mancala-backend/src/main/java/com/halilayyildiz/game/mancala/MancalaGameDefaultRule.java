@@ -1,4 +1,4 @@
-package com.halilayyildiz.game.mancala.data.model;
+package com.halilayyildiz.game.mancala;
 
 import com.halilayyildiz.game.model.IGameRule;
 
