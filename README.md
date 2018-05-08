@@ -1,5 +1,5 @@
 # Mancala Game
-Standard Implementation of Mancala Game
+Yet Another Mancala Game Implementation
 
 ## About
 This application simply implements 6-stone version of Mancala Game. Players can play this game via web based user interface.
