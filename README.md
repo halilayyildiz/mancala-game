@@ -34,7 +34,6 @@ Server Runtime    | [Nginx](https://www.nginx.com/)
 
 ## How to build & run
 
-> Notice:
 > Server should have installed Java 8+, Maven 3.5+ and Node.js 9+ runtime environment.
 
 Project has Maven based modular structure. In order to build project, under "code" folder simply run:
