@@ -48,7 +48,7 @@ This command will simply build both backend and frontend project, run unit tests
 # Navigate to PROJECT_FOLDER/code/mancala-backend/target and then
 java -jar mancala-backend-1.0-SNAPSHOT.jar
 ```
-Then navigate to your web browser and type:
+Then open your web browser and type:
 ```bash
 http://localhost:8080
 ```
