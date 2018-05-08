@@ -1,5 +1,6 @@
 package com.halilayyildiz.game;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
@@ -16,7 +17,7 @@ public class PlayerStore
 	@Autowired
 	PlayerProvider							playerProvider;
 
-	private Map<String, Optional<IPlayer>>	players	= new HashedMap<>();
+	private Map<String, Optional<IPlayer>>	players	= Collections.synchronizedMap(new HashedMap<>());
 
 	public PlayerStore()
 	{

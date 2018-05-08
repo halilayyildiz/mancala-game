@@ -13,35 +13,35 @@ import com.halilayyildiz.game.model.IGame;
 @Component
 public class GameStore
 {
-    @Autowired
-    GameProvider gameProvider;
+	@Autowired
+	GameProvider		gameProvider;
 
-    Map<String, IGame> games = new HashedMap<>();
+	Map<String, IGame>	games	= new HashedMap<>();
 
-    public GameStore()
-    {
+	public GameStore()
+	{
 
-    }
+	}
 
-    public Optional<IGame> getGame(String gameId)
-    {
-        return Optional.of(games.get(gameId));
-    }
+	public Optional<IGame> getGame(String gameId)
+	{
+		return Optional.ofNullable(games.get(gameId));
+	}
 
-    public IGame findOpenGame(GameType gameType)
-    {
-        IGame gameInstance = games.values().stream().filter(game -> game.getType().equals(gameType)).filter(game -> !game.isFull()).findFirst()
-                .orElseGet(() -> this.createGame(gameType));
+	public IGame findOpenGame(GameType gameType)
+	{
+		IGame gameInstance = games.values().stream().filter(game -> game.getType().equals(gameType)).filter(game -> !game.isFull()).findFirst()
+				.orElseGet(() -> this.createGame(gameType));
 
-        return gameInstance;
-    }
+		return gameInstance;
+	}
 
-    public IGame createGame(GameType gameType)
-    {
-        IGame game = gameProvider.get(gameType);
-        games.put(game.getId(), game);
+	public IGame createGame(GameType gameType)
+	{
+		IGame game = gameProvider.get(gameType);
+		games.put(game.getId(), game);
 
-        return game;
-    }
+		return game;
+	}
 
 }

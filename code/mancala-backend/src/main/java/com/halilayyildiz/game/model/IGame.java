@@ -1,6 +1,6 @@
 package com.halilayyildiz.game.model;
 
-import java.util.LinkedHashMap;
+import java.util.Map;
 
 import com.halilayyildiz.game.mancala.PlayerMove;
 
@@ -18,7 +18,7 @@ public interface IGame
 
 	void setActivePlayerId(String playerId);
 
-	LinkedHashMap<String, IPlayer> getPlayers();
+	Map<String, IPlayer> getPlayers();
 
 	IGameStatus onPlayerMove(PlayerMove playerMove);
 

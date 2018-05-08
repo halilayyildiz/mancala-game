@@ -1,7 +1,5 @@
 package com.halilayyildiz.game.controller;
 
-import java.util.Optional;
-
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -69,6 +67,7 @@ public class GamePlayController
 	public ResponseEntity<GameStatusResponse> getGameStatus(@RequestParam("gameId") String gameId)
 	{
 		IGame game = gameService.getGame(gameId).orElseThrow(() -> new GameNotFoundException(gameId));
+
 		return ResponseEntity.ok(new GameStatusResponse(game.getStatus()).success());
 	}
 
