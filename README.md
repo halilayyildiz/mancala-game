@@ -30,7 +30,7 @@ Server Runtime    | [Nginx](https://www.nginx.com/)
 - Websocket Communication (this application simply use client side polling)
 - Persistent Database (data is not persisted in this version)
 - Authentication/Authorization (not implemented)
-- API documentation
+- Documentation (Architecture, API ...)
 
 ## How to build & run
 
