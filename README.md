@@ -10,9 +10,8 @@ Application is hosted on DigitalOcean Ubuntu droplet. You can access the demo ap
 
 [Mancala Game Demo](http://mancala.halilayyildiz.com/)
 
-
-
-
+## How to play
+After clicking 'Start Game', whenever another user is connected, your turn sign will be changed to YES. Then, you can right click any of your pits and click 'Play' button to make a move.
 
 ## Technology Stack
 Component         | Technology
