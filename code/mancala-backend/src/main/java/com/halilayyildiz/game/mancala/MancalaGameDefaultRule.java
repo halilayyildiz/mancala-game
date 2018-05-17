@@ -46,7 +46,7 @@ public class MancalaGameDefaultRule implements IGameRule
 				playerPits[actualPlayerIndex][actualPitNum]++;
 			}
 
-			// if it is last stone and you put in empty pit, then collect all stones to your pit
+			// if it is the last stone and you put in empty pit, then collect all stones to your kalah
 			if (i == stoneCount - 1 && (actualPitNum != MAX_PIT_COUNT))
 			{
 				if (playerPits[actualPlayerIndex][actualPitNum] == 1)
