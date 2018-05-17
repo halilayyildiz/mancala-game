@@ -25,7 +25,6 @@ public class MancalaGameDefaultRule implements IGameRule
 		int[][] playerPits = board.getPlayerPits();
 
 		int stoneCount = playerPits[actualPlayerIndex][actualPitNum - 1];
-		System.out.println("stones: " + stoneCount);
 
 		playerPits[actualPlayerIndex][actualPitNum - 1] = 0;
 
