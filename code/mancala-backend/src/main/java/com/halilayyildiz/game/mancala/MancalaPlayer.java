@@ -49,8 +49,7 @@ public class MancalaPlayer extends BasePlayer implements IPlayer
 	@Override
 	public IGameStatus resignGame()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException("Not Implemented Yet !");
 	}
 
 }
